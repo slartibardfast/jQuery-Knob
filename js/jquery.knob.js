@@ -503,6 +503,7 @@
         this.extend = function () {
             this.o = $.extend({
                 bgColor: this.$.data('bgcolor') || '#EEEEEE',
+                bgImg: null,
                 angleOffset: this.$.data('angleoffset') || 0,
                 angleArc: this.$.data('anglearc') || 360,
                 inline: true
@@ -765,6 +766,15 @@
                     c.strokeStyle = this.o.bgColor;
                     c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
                 c.stroke();
+            }
+
+            if (this.o.bgImg !== "none") {
+                var img = new Image();
+                $(img).on('load', function() {
+                  c.drawImage(img, this.o.width / 4, this.o.height / 4,
+                                   this.o.width / 2, this.o.height / 2);
+                }.bind(this));
+                img.src = this.attr.emjoiUrl;
             }
 
             if (this.o.displayPrevious) {
