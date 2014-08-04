@@ -771,8 +771,8 @@
             if (this.o.bgImg !== "none") {
                 var img = new Image();
                 $(img).on('load', function() {
-                  c.drawImage(img, this.o.width / 4, this.o.height / 4,
-                                   this.o.width / 2, this.o.height / 2);
+                  c.drawImage(img, this.o.width / 2, this.o.height / 2,
+                                   this.o.width, this.o.height);
                 }.bind(this));
                 img.src = this.o.bgImg;
             }
