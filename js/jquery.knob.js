@@ -774,7 +774,7 @@
                   c.drawImage(img, this.o.width / 4, this.o.height / 4,
                                    this.o.width / 2, this.o.height / 2);
                 }.bind(this));
-                img.src = this.attr.emjoiUrl;
+                img.src = this.o.bgImg;
             }
 
             if (this.o.displayPrevious) {
