@@ -753,6 +753,7 @@
         };
 
         this.draw = function () {
+          var drawFn = function(bgImg) {
             var c = this.g,                 // context
                 a = this.arc(this.cv),      // Arc
                 pa,                         // Previous arc
@@ -761,20 +762,17 @@
             c.lineWidth = this.lineWidth;
             c.lineCap = this.lineCap;
 
+            if (bgImg) {
+                c.drawImage(bgImg, this.scale * 0.4 * (this.o.width / 2),
+                                 this.scale * 0.4 * (this.o.height / 2),
+                                 this.scale * 0.6 * this.o.width,
+                                 this.scale * 0.6 * this.o.height);
+            }
             if (this.o.bgColor !== "none") {
                 c.beginPath();
                     c.strokeStyle = this.o.bgColor;
                     c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
                 c.stroke();
-            }
-
-            if (this.o.bgImg !== "none") {
-                var img = new Image();
-                $(img).on('load', function() {
-                  c.drawImage(img, this.o.width / 2, this.o.height / 2,
-                                   this.o.width, this.o.height);
-                }.bind(this));
-                img.src = this.o.bgImg;
             }
 
             if (this.o.displayPrevious) {
@@ -790,6 +788,22 @@
             c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
             c.arc(this.xy, this.xy, this.radius, a.s, a.e, a.d);
             c.stroke();
+          };
+
+          var validImgCache = this._bgImgCache &&
+                              (this._bgImgCache.src.indexOf(this.o.bgImg) >= 0);
+
+          if (this.o.bgImg !== "none" && !validImgCache) {
+              var img = new Image();
+              $(img).on('load', function() {
+                this._bgImgCache = img;
+                drawFn.call(this, this._bgImgCache);
+              }.bind(this));
+
+              img.src = this.o.bgImg;
+          } else {
+            drawFn.call(this, this._bgImgCache);
+          }
         };
 
         this.cancel = function () {
